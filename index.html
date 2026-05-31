@@ -2,16 +2,22 @@
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
     <title>SHΞN™ Termuaix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://v1.fontapi.ir/css/Vazir');
-        body { 
-            font-family: 'Vazir', sans-serif; 
-            background-color: #000000; /* مشکی مطلق */
+        
+        /* فیکس قطعی تناسب صفحه و جلوگیری از بیرون زدن فوتر */
+        html, body { 
+            height: 100%;
+            height: 100dvh; /* ویوپورت داینامیک که سایز واقعی صفحه رو می‌گیره */
+            width: 100%;
             margin: 0;
-            overflow: hidden;
+            padding: 0;
+            overflow: hidden; /* قفل کردن اسکرول کل صفحه */
+            font-family: 'Vazir', sans-serif; 
+            background-color: #000000; 
             color: #e0e0e0;
         }
         
@@ -61,32 +67,32 @@
         .chat-msg { white-space: pre-wrap; word-break: break-word; }
     </style>
 </head>
-<body class="h-screen w-full flex justify-center items-center sm:p-5">
+<body class="flex justify-center items-center sm:p-5">
 
     <div class="w-full h-full sm:max-w-md sm:h-[95%] bg-[#050505] sm:rounded-3xl shadow-[0_0_50px_rgba(255,68,0,0.1)] flex flex-col relative border-0 sm:border neon-border overflow-hidden">
         
-        <div class="bg-[#080808] border-b border-gray-900 p-4 text-center font-bold text-lg text-[#ff4400] neon-text tracking-widest z-30 relative">
+        <div class="bg-[#080808] border-b border-gray-900 p-4 text-center font-bold text-lg text-[#ff4400] neon-text tracking-widest flex-none z-30">
             ☬SHΞN™ Termuaix
         </div>
 
         <div id="chat-box" class="flex-1 p-5 overflow-y-auto space-y-6 relative z-10 bg-[#020202]">
             </div>
 
-        <div class="bg-[#080808] border-t border-gray-900 p-3 sm:p-4 z-30 relative">
+        <div class="bg-[#080808] border-t border-gray-900 p-3 flex-none z-30">
             <div class="flex flex-row items-center gap-3" dir="ltr">
                 <input type="text" id="user-input" 
-                       class="flex-1 bg-[#0a0a0a] border border-gray-800 rounded-xl px-5 py-3.5 text-white text-right focus:outline-none focus:neon-border-strong transition-all placeholder-gray-700" 
+                       class="flex-1 bg-[#0a0a0a] border border-gray-800 rounded-xl px-4 py-3.5 text-white text-right focus:outline-none focus:neon-border-strong transition-all placeholder-gray-700" 
                        placeholder="..." 
                        onkeypress="if(event.key === 'Enter') sendMessage()">
                 
                 <button onclick="sendMessage()" 
-                        class="flex items-center justify-center w-14 h-14 rounded-xl send-btn-neon group">
+                        class="flex items-center justify-center w-14 h-14 rounded-xl send-btn-neon group shrink-0">
                     <span class="text-3xl font-black transform translate-y-[-1px] group-hover:scale-110 transition-transform">☬</span>
                 </button>
             </div>
         </div>
 
-        <div class="bg-[#050505] py-2 text-center z-30 relative border-t border-gray-900">
+        <div class="bg-[#050505] py-2 text-center flex-none border-t border-gray-900 z-30">
             <a href="https://t.me/shervini" target="_blank" 
                class="text-[10px] text-gray-600 hover:text-[#ff4400] transition-colors tracking-[0.2em] font-mono">
                 ☬Exclusive SHΞN™ made
@@ -95,7 +101,6 @@
     </div>
 
     <script>
-        // لود اولیه و نمایش پیام خوش‌آمدگویی
         window.onload = function() {
             appendMessage("Hi , im SHΞN™ai wassup !?", false);
         };
@@ -103,20 +108,16 @@
         function appendMessage(text, isUser, id = null) {
             const chatBox = document.getElementById('chat-box');
             
-            // وراپر برای تراز کردن پیام
             const wrapper = document.createElement('div');
             wrapper.className = `flex w-full ${isUser ? 'justify-end' : 'justify-start'} animate-bubble`;
             if (id) wrapper.id = id;
             
-            // بالب پیام
             const div = document.createElement('div');
-            div.setAttribute('dir', 'auto'); // تشخیص خودکار زبان
+            div.setAttribute('dir', 'auto'); 
             
             if (isUser) {
-                // استایل نئونی نارنجی برای کاربر (سمت راست)
                 div.className = "bg-[#111] border neon-border text-gray-100 px-5 py-3 rounded-2xl rounded-tr-sm max-w-[85%] chat-msg text-right shadow-[0_5px_15px_rgba(0,0,0,0.3)]";
             } else {
-                // استایل دارک برای هوش مصنوعی (سمت چپ)
                 div.className = "bg-[#0a0a0a] border border-gray-800 text-gray-300 px-5 py-3 rounded-2xl rounded-tl-sm max-w-[85%] chat-msg text-left leading-relaxed shadow-[0_5px_15px_rgba(0,0,0,0.3)]";
             }
             
@@ -124,7 +125,6 @@
             wrapper.appendChild(div);
             chatBox.appendChild(wrapper);
             
-            // اسکرول نرم به پایین
             setTimeout(() => {
                 chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
             }, 50);
@@ -140,7 +140,6 @@
             appendMessage(message, true);
             input.value = '';
             
-            // وضعیت لودینگ اختصاصی
             const loadingId = 'loading-' + Date.now();
             const loadingDiv = appendMessage('☬SHΞN™ core process...', false, loadingId);
             loadingDiv.classList.add('animate-pulse', 'text-[#ff4400]', 'font-mono', 'neon-text', 'border-[#ff4400]/50');
