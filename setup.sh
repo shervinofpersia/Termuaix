@@ -1,36 +1,32 @@
 #!/bin/bash
 
-# پاک کردن صفحه برای زیبایی کار
 clear
 echo "======================================"
 echo "    در حال آماده‌سازی هوش مصنوعی...   "
 echo "======================================"
 
-# آپدیت ترموکس و نصب پایتون
-echo "[*] Installing dependencies (Python, Flask)..."
+# نصب پیش‌نیازهای پایه ترموکس
 pkg update -y
-pkg install python -y
-pkg install wget -y
+pkg install python wget -y
 
-# نصب کتابخانه‌های پایتون
-pip install flask requests
-
-# ساخت پوشه پروژه و رفتن به داخل آن
-mkdir -p ~/termux-ai-chat/templates
+# ایجاد پوشه پروژه
+mkdir -p ~/termux-ai-chat
 cd ~/termux-ai-chat
 
-# دانلود فایل‌ها از گیت‌هاب تو (آدرس‌ها رو با لینک raw ریپازیتوری خودت جایگزین کن)
-echo "[*] Downloading project files..."
-wget -q -O app.py https://raw.githubusercontent.com/YourUsername/YourRepo/main/app.py
-wget -q -O templates/index.html https://raw.githubusercontent.com/YourUsername/YourRepo/main/templates/index.html
+# دانلود مستقیم فایل HTML از ریپازیتوری شما
+echo "[*] Downloading user interface..."
+wget -q -O index.html https://raw.githubusercontent.com/shervinofpersia/Termuaix/main/index.html
 
-# اجرای سرور در پس‌زمینه
+# بستن سرورهای لوکال قبلی برای آزاد شدن پورت
+pkill -f "http.server" 2>/dev/null
+
+# اجرای وب‌سرور داخلی و پیش‌فرض خود پایتون روی پورت 5000 در پس‌زمینه
 echo "[*] Starting local server..."
-python app.py &
+python -m http.server 5000 &
 
-# مکث کوتاه برای اینکه سرور کامل بالا بیاد
-sleep 3
+# مکث کوتاه برای لود شدن سرور
+sleep 2
 
-# باز کردن آدرس در مرورگر گرافیکی کاربر
+# باز کردن مرورگر گوشی
 echo "[*] Opening browser..."
 termux-open-url http://127.0.0.1:5000
