@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termux AI Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://v1.fontapi.ir/css/Vazir');
+        body { font-family: 'Vazir', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white h-screen flex flex-col items-center p-4">
+
+    <div class="w-full max-w-md bg-gray-800 rounded-xl shadow-lg flex flex-col h-full overflow-hidden border border-gray-700">
+        <div class="bg-indigo-600 p-4 text-center font-bold text-xl">
+            هوش مصنوعی (Pollinations)
+        </div>
+
+        <div id="chat-box" class="flex-1 p-4 overflow-y-auto space-y-4">
+            <div class="text-gray-400 text-center text-sm">پیام خود را بنویسید...</div>
+        </div>
+
+        <div class="p-4 bg-gray-700 flex gap-2">
+            <input type="text" id="user-input" class="flex-1 bg-gray-600 rounded-lg px-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="چیزی بپرس...">
+            <button onclick="sendMessage()" class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg font-bold transition">ارسال</button>
+        </div>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const chatBox = document.getElementById('chat-box');
+            
+            // پیام کاربر
+            chatBox.innerHTML += `<div class="bg-indigo-600 ml-auto p-3 rounded-l-xl rounded-tr-xl w-3/4">${message}</div>`;
+            input.value = '';
+            
+            // نمایش حالت در حال تایپ
+            const loadingId = 'loading-' + Date.now();
+            chatBox.innerHTML += `<div id="${loadingId}" class="bg-gray-600 mr-auto p-3 rounded-r-xl rounded-tl-xl w-3/4 text-gray-300">در حال فکر کردن...</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
+                });
+                
+                const data = await response.json();
+                document.getElementById(loadingId).remove();
+                
+                // پیام هوش مصنوعی
+                chatBox.innerHTML += `<div class="bg-gray-600 mr-auto p-3 rounded-r-xl rounded-tl-xl w-3/4">${data.response || data.error}</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            } catch (error) {
+                document.getElementById(loadingId).innerText = "خطا در برقراری ارتباط!";
+            }
+        }
+    </script>
+</body>
+</html>
