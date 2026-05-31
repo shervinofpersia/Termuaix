@@ -13,14 +13,15 @@ pkg install python wget -y
 mkdir -p ~/termux-ai-chat
 cd ~/termux-ai-chat
 
-# دانلود مستقیم فایل HTML از ریپازیتوری شما
+# دانلود مستقیم فایل HTML از ریپازیتوری
 echo "[*] Downloading user interface..."
 wget -q -O index.html https://raw.githubusercontent.com/shervinofpersia/Termuaix/main/index.html
 
-# بستن سرورهای لوکال قبلی برای آزاد شدن پورت
-pkill -f "http.server" 2>/dev/null
+# کشتن تمام پروسه‌های قبلی پایتون برای آزاد شدن قطعی پورت ۵۰۰۰
+echo "[*] Cleaning up old processes..."
+pkill python 2>/dev/null
 
-# اجرای وب‌سرور داخلی و پیش‌فرض خود پایتون روی پورت 5000 در پس‌زمینه
+# اجرای وب‌سرور داخلی و پیش‌فرض خود پایتون روی پورت ۵۰۰۰ در پس‌زمینه
 echo "[*] Starting local server..."
 python -m http.server 5000 &
 
